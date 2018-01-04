@@ -121,7 +121,10 @@ func (c *Conda) UpdateAndClean() error {
 	c.Log.BeginStep("Installing conda environment from environment.yml")
 
 	condaHome := filepath.Join(c.Stager.DepDir(), "conda")
-	if err := c.Command.Execute("/", indentWriter(os.Stdout), indentWriter(os.Stderr), filepath.Join(condaHome, "bin", "conda"), "env", "update", "--quiet", "-n", "dep_env", "-f", filepath.Join(c.Stager.BuildDir(), "environment.yml")); err != nil {
+	if err := c.Command.Execute("/", indentWriter(os.Stdout), indentWriter(os.Stderr), filepath.Join(condaHome, "bin", "conda"), "env", "update",
+ "--debug", "--verbose",//ALEX
+// "--quiet", //ALEX
+ "-n", "dep_env", "-f", filepath.Join(c.Stager.BuildDir(), "environment.yml")); err != nil {
 		return fmt.Errorf("Could not run conda env update: %v", err)
 	}
 	if err := c.Command.Execute("/", indentWriter(os.Stdout), indentWriter(os.Stderr), filepath.Join(condaHome, "bin", "conda"), "clean", "-pt"); err != nil {
